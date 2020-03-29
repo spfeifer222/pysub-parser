@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from pysubparser.classes.exceptions import InvalidSubtitleTypeError
 
 from pysubparser.parsers import srt
@@ -13,10 +15,18 @@ PARSERS = {
     'txt': txt.parse
 }
 
+WRITERS = {
+    'srt': srt.write}
+    #'sub': sub.write,
+    #'txt': txt.write,
+    #'ass': ssa.write,
+    #'ssa': ssa.write,
+#}
 
 def parse(path, subtype=None, encoding='utf-8', **kwargs):
+
     if not subtype:
-        subtype = path[path.rfind('.') + 1:]
+        subtype = Path(path).suffix[1:]
 
     parser = PARSERS.get(subtype.lower())
 
@@ -24,3 +34,20 @@ def parse(path, subtype=None, encoding='utf-8', **kwargs):
         raise InvalidSubtitleTypeError(subtype, PARSERS.keys())
 
     return parser(path, encoding, **kwargs)
+
+
+def write(subtitles, encoding='utf-8', subtype=None, **kwargs):
+    "wirte subtitles to file."
+    if not subtype:
+        # take original subtype
+        subtype = subtitles.subtype
+
+    writer = WRITERS.get(subtype.lower())
+
+    if not writer:
+        # TODO: create error class
+        pass
+        #raise InvalidSubtitleTypeError(subtype, PARSERS.keys())
+
+    return writer(subtitles, encoding, **kwargs)
+
