@@ -1,8 +1,21 @@
 import re
-from pathlib import Path
-import datetime as dt
-
 import unidecode
+import datetime as dt
+from pathlib import Path
+
+from pysubparser.writers import srt
+#from pysubparser.writters import sub.write      # not implemented
+#from pysubparser.writters import txt.write      # not implemented
+#from pysubparser.writters import ass.write      # not implemented
+#from pysubparser.writters import ssa.write      # not implemented
+
+WRITERS = {
+    'srt': srt.write}
+    #'sub': sub.write,                           # not implemented
+    #'txt': txt.write,                           # not implemented
+    #'ass': ssa.write,                           # not implemented
+    #'ssa': ssa.write,                           # not implemented
+#}
 
 ALPHA_CLEANER = re.compile(r'[^\w\s\?]+', re.UNICODE)
 BRACKETS_CLEANER = re.compile(r'\[[^[]*\]', re.UNICODE)
@@ -26,9 +39,10 @@ class Subtitles:
     original path.
     """
 
-    def __init__(self, subtitles, source_path, subtype=None):
+    def __init__(self, subtitles, source_path, subtype=None, encoding=None):
         self.subs = subtitles
         self.source = source_path
+        self.encoding = encoding
 
     @property
     def subtype(self):
@@ -56,9 +70,32 @@ class Subtitles:
             sub.start = start.time()
             sub.end = end.time()
 
+    def write(self, encoding=None, subtype=None, **kwargs):
+        """
+        Backup original subtitles and save actual subtitles to original
+        destination and name.
+        """
+
+        if not subtype:
+            # take original subtype
+            subtype = self.subtype
+
+        if not encoding:
+            # take original encoding
+            encoding = self.encoding
+
+        writer = WRITERS.get(subtype.lower())
+
+        if not writer:
+            # TODO: create error class
+            pass
+            #raise InvalidSubtitleTypeError(subtype, PARSERS.keys())
+
+        return writer(self.__class__, encoding=encoding, **kwargs)
+
 
 class Subtitle:
-    """
+    """**kwargs
     Class to save times and content of a single subtitle.
     """
     def __init__(self, index, start=None, end=None, text_lines=None):
@@ -113,20 +150,3 @@ class Subtitle:
     def __repr__(self):
         return f'{self.start} | {self.text} ({self.duration} ms.)'
 
-
-
-
-"""
-funktioniert in ipython:
-
-for key, val in subs2.items():
-    print(
-    f"Key: {key}\n\
-      Idx: {val.index}\n\
-      Start: {val.start}\n\
-      End: {val.end}\n\
-      Text: {val.text}\n\
-      Text (Type): {type(val.text)}\n\
-      Text Lines: {val.text_lines}\n\
-      Text Line (Type): {type(val.text_lines)}\n")
-"""

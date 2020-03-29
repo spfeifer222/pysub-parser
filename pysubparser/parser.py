@@ -37,7 +37,7 @@ def parse(path, subtype=None, encoding='utf-8', **kwargs):
 
 
 def write(subtitles, encoding='utf-8', subtype=None, **kwargs):
-    "wirte subtitles to file."
+    "Backup original subtitles and save actual subtitles to original destination and name."
     if not subtype:
         # take original subtype
         subtype = subtitles.subtype

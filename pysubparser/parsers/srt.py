@@ -50,12 +50,12 @@ def parse(path, encoding='utf-8', clean=True, **kwargs):
                     subtitles[index] = subtitle
                     subtitle = None
 
-    subtitles = Subtitles(subtitles, path, subtype=subtype)
+    subtitles = Subtitles(subtitles, path, subtype=subtype, encoding=encoding)
 
     return subtitles
 
 
-def write(subtitles, encoding='utf-8', **kwargs):
+def write(subtitles, encoding=None, **kwargs):
 
     """
     Save subtitles to the source directory of the origin subtitles.
@@ -69,6 +69,10 @@ def write(subtitles, encoding='utf-8', **kwargs):
     p.rename(p.with_suffix('.srt.orig'))
 
     index = 1
+
+    if not encoding:
+        # get encoding from Subtitles attribut
+        encoding = subtitles.encoding
 
     with open(subtitles.source, mode='w', encoding=encoding) as file:
 
