@@ -91,7 +91,7 @@ class Subtitles:
             pass
             #raise InvalidSubtitleTypeError(subtype, PARSERS.keys())
 
-        return writer(self.__class__, encoding=encoding, **kwargs)
+        return writer(self, encoding=encoding, **kwargs)
 
 
 class Subtitle:
