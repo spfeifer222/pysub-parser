@@ -4,10 +4,10 @@ import datetime as dt
 from pathlib import Path
 
 from pysubparser.writers import srt
-#from pysubparser.writters import sub.write      # not implemented
-#from pysubparser.writters import txt.write      # not implemented
-#from pysubparser.writters import ass.write      # not implemented
-#from pysubparser.writters import ssa.write      # not implemented
+#from pysubparser.writers import sub.write      # not implemented
+#from pysubparser.writers import txt.write      # not implemented
+#from pysubparser.writers import ass.write      # not implemented
+#from pysubparser.writers import ssa.write      # not implemented
 
 WRITERS = {
     'srt': srt.write}
@@ -16,6 +16,8 @@ WRITERS = {
     #'ass': ssa.write,                           # not implemented
     #'ssa': ssa.write,                           # not implemented
 #}
+
+TIMESTAMP_FORMAT = '%H:%M:%S,%f'
 
 ALPHA_CLEANER = re.compile(r'[^\w\s\?]+', re.UNICODE)
 BRACKETS_CLEANER = re.compile(r'\[[^[]*\]', re.UNICODE)
@@ -65,7 +67,7 @@ class Subtitles:
             date = dt.date(2000, 1, 1)
             start = dt.datetime.combine(date, sub.start) + delta
             end = dt.datetime.combine(date, sub.end) + delta
-            # TODO; remove all entries, before date (before start time)
+            # TODO; remove all entries, before variable date (before start time)
             # convert to time object and save
             sub.start = start.time()
             sub.end = end.time()
@@ -95,7 +97,7 @@ class Subtitles:
 
 
 class Subtitle:
-    """**kwargs
+    """
     Class to save times and content of a single subtitle.
     """
     def __init__(self, index, start=None, end=None, text_lines=None):
@@ -115,6 +117,14 @@ class Subtitle:
     @property
     def duration(self):
         return time_to_milliseconds(self.end) - time_to_milliseconds(self.start)
+
+    @property
+    def start_string(self):
+        return self.start.strftime(TIMESTAMP_FORMAT)[:-3]
+
+    @property
+    def end_string(self):
+        return self.end.strftime(TIMESTAMP_FORMAT)[:-3]
 
     def add_text_line(self, text):
         self.text_lines.append(text)
@@ -148,5 +158,5 @@ class Subtitle:
                         self.text_lines[i] = unidecode.unidecode(self.text_lines[i])
 
     def __repr__(self):
-        return f'{self.start} | {self.text} ({self.duration} ms.)'
+        return f"{self.start_string}-{self.end_string}  {self.text} ({self.duration} ms.)"
 

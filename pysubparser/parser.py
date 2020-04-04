@@ -15,13 +15,6 @@ PARSERS = {
     'txt': txt.parse
 }
 
-WRITERS = {
-    'srt': srt.write}
-    #'sub': sub.write,
-    #'txt': txt.write,
-    #'ass': ssa.write,
-    #'ssa': ssa.write,
-#}
 
 def parse(path, subtype=None, encoding='utf-8', **kwargs):
 
@@ -34,20 +27,3 @@ def parse(path, subtype=None, encoding='utf-8', **kwargs):
         raise InvalidSubtitleTypeError(subtype, PARSERS.keys())
 
     return parser(path, encoding, **kwargs)
-
-
-def write(subtitles, encoding='utf-8', subtype=None, **kwargs):
-    "Backup original subtitles and save actual subtitles to original destination and name."
-    if not subtype:
-        # take original subtype
-        subtype = subtitles.subtype
-
-    writer = WRITERS.get(subtype.lower())
-
-    if not writer:
-        # TODO: create error class
-        pass
-        #raise InvalidSubtitleTypeError(subtype, PARSERS.keys())
-
-    return writer(subtitles, encoding, **kwargs)
-
