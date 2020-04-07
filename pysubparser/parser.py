@@ -15,7 +15,6 @@ PARSERS = {
     'txt': txt.parse
 }
 
-
 def parse(path, subtype=None, encoding='utf-8', **kwargs):
 
     if not subtype:

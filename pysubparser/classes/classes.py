@@ -61,7 +61,6 @@ class Subtitles:
         """
         for _,sub in self.subs.items():
             # create timedelta object
-            #old: delta = dt.timedelta(milliseconds=time_in_ms)
             delta = dt.timedelta(**kwargs)
             # create datetime objects & calculate
             date = dt.date(2000, 1, 1)
