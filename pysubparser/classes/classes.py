@@ -1,19 +1,104 @@
 import re
-
 import unidecode
+import datetime as dt
+from pathlib import Path
 
-ALPHA_CLEANER = re.compile(r'[^\w\s]+', re.UNICODE)
+from pysubparser.writers import srt
+#from pysubparser.writers import sub.write      # not implemented
+#from pysubparser.writers import txt.write      # not implemented
+#from pysubparser.writers import ass.write      # not implemented
+#from pysubparser.writers import ssa.write      # not implemented
+
+WRITERS = {
+    'srt': srt.write}
+    #'sub': sub.write,                           # not implemented
+    #'txt': txt.write,                           # not implemented
+    #'ass': ssa.write,                           # not implemented
+    #'ssa': ssa.write,                           # not implemented
+#}
+
+TIMESTAMP_FORMAT = '%H:%M:%S,%f'
+
+ALPHA_CLEANER = re.compile(r'[^\w\s\?]+', re.UNICODE)
 BRACKETS_CLEANER = re.compile(r'\[[^[]*\]', re.UNICODE)
 FORMAT_CLOSE_CLEANER = re.compile(r'</[^[]*>', re.UNICODE)
 FORMAT_OPEN_CLEANER = re.compile(r'<[^[]*>', re.UNICODE)
 WHITESPACE_CLEANER = re.compile(r'\s+', re.UNICODE)
+ADVERTING_CLEANER = re.compile(r'''
+                    .*?    # non-greedy match before adv
+                    (www\.Addic7ed\.com|corrected by|subtitles) # adv keywords
+                    .*     # rest of the subtitle
+                    ''', re.UNICODE|re.VERBOSE|re.IGNORECASE|re.DOTALL)
 
 
 def time_to_milliseconds(time):
     return ((time.hour * 60 + time.minute) * 60 + time.second) * 1000 + time.microsecond//1000
 
 
+class Subtitles:
+    """
+    Class to save all Subtitles of a movie including it's type and
+    original path.
+    """
+
+    def __init__(self, subtitles, source_path, subtype=None, encoding=None):
+        self.subs = subtitles
+        self.source = source_path
+        self.encoding = encoding
+
+    @property
+    def subtype(self):
+        return Path(self.source).suffix[1:]
+
+    # old: def shift(self, time_in_ms):
+    def shift(self, **kwargs):
+        """
+        Shift all subtitles using a datetime.timedelta object.
+
+        **kwargs: accept all argument of a timedelta object:
+                  days, seconds, microseconds, milliseconds, minutes,
+                  hours, weeks
+        """
+        for _,sub in self.subs.items():
+            # create timedelta object
+            delta = dt.timedelta(**kwargs)
+            # create datetime objects & calculate
+            date = dt.date(2000, 1, 1)
+            start = dt.datetime.combine(date, sub.start) + delta
+            end = dt.datetime.combine(date, sub.end) + delta
+            # TODO; remove all entries, before variable date (before start time)
+            # convert to time object and save
+            sub.start = start.time()
+            sub.end = end.time()
+
+    def write(self, encoding=None, subtype=None, **kwargs):
+        """
+        Backup original subtitles and save actual subtitles to original
+        destination and name.
+        """
+
+        if not subtype:
+            # take original subtype
+            subtype = self.subtype
+
+        if not encoding:
+            # take original encoding
+            encoding = self.encoding
+
+        writer = WRITERS.get(subtype.lower())
+
+        if not writer:
+            # TODO: create error class
+            pass
+            #raise InvalidSubtitleTypeError(subtype, PARSERS.keys())
+
+        return writer(self, encoding=encoding, **kwargs)
+
+
 class Subtitle:
+    """
+    Class to save times and content of a single subtitle.
+    """
     def __init__(self, index, start=None, end=None, text_lines=None):
         self.index = index
         self.start = start
@@ -26,36 +111,51 @@ class Subtitle:
 
     @property
     def clean(self):
-        return self.clean_up(to_lowercase=True, to_ascii=True, remove_brackets=True, remove_formatting=True)
+        return self.clean_up(to_lowercase=False, to_ascii=False, remove_brackets=True, remove_formatting=False, remove_advertising=True)
 
     @property
     def duration(self):
         return time_to_milliseconds(self.end) - time_to_milliseconds(self.start)
 
+    @property
+    def start_string(self):
+        return self.start.strftime(TIMESTAMP_FORMAT)[:-3]
+
+    @property
+    def end_string(self):
+        return self.end.strftime(TIMESTAMP_FORMAT)[:-3]
+
     def add_text_line(self, text):
         self.text_lines.append(text)
 
-    def clean_up(self, to_lowercase=True, to_ascii=False, remove_brackets=False, remove_formatting=False):
-        text = self.text
+    def clean_up(self, to_lowercase=False, to_ascii=False, remove_brackets=False, remove_formatting=False, remove_advertising=True):
 
-        if to_lowercase:
-            text = text.lower()
+        if remove_advertising:
 
-        if remove_brackets:
-            text = BRACKETS_CLEANER.sub('', text)
+            # remove complete subtitle, if 1 line match advertising
+            if ADVERTING_CLEANER.search(self.text):
 
-        if remove_formatting:
-            text = FORMAT_CLOSE_CLEANER.sub('', text)
-            text = FORMAT_OPEN_CLEANER.sub('', text)
+                self.text_lines = []
 
-        text = ALPHA_CLEANER.sub('', text)
-        text = WHITESPACE_CLEANER.sub(' ', text).strip()
+            else:
 
-        if to_ascii:
-            text = unidecode.unidecode(text)
+                for i in range(len(self.text_lines)):
 
-        return text
+                    if to_lowercase:
+                        self.text_lines[i] = self.text_line[i].lower()
+
+                    if remove_brackets:
+                        self.text_lines[i] = BRACKETS_CLEANER.sub('', self.text_lines[i])
+
+                    if remove_formatting:
+                        self.text_lines[i] = FORMAT_CLOSE_CLEANER.sub('', self.text_lines[i])
+                        self.text_lines[i] = FORMAT_OPEN_CLEANER.sub('', self.text_lines[i])
+
+                    self.text_lines[i] = WHITESPACE_CLEANER.sub(' ', self.text_lines[i]).strip()
+
+                    if to_ascii:
+                        self.text_lines[i] = unidecode.unidecode(self.text_lines[i])
 
     def __repr__(self):
-        return f'{self.index} > {self.text} ({self.duration} ms.)'
+        return f"{self.start_string}-{self.end_string}  {self.text} ({self.duration} ms.)"
 

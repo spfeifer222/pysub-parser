@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from pysubparser.classes.exceptions import InvalidSubtitleTypeError
 
 from pysubparser.parsers import srt
@@ -13,10 +15,10 @@ PARSERS = {
     'txt': txt.parse
 }
 
-
 def parse(path, subtype=None, encoding='utf-8', **kwargs):
+
     if not subtype:
-        subtype = path[path.rfind('.') + 1:]
+        subtype = Path(path).suffix[1:]
 
     parser = PARSERS.get(subtype.lower())
 
