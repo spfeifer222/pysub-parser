@@ -32,7 +32,15 @@ def write(subtitles, encoding=None, **kwargs):
 
         print("Write subtiles to disk and skip empty subtitles...")
 
+        # delete empty subs since impossible in a loop
         to_delete = []
+        [to_delete.append(_) for _,sub in subtitles.subs.items() if sub.text == '']
+
+        # remove marked entries from subs-dict
+        for entry in to_delete:
+
+            subtitles.subs.pop(entry)
+
 
         for _,sub in subtitles.subs.items():
             if sub.text == '':
@@ -52,10 +60,6 @@ def write(subtitles, encoding=None, **kwargs):
             # count index
             index += 1
 
-        # remove marked entries from subs-dict
-        for entry in to_delete:
-
-            subtitles.subs.pop(entry)
 
         print("Done.")
 

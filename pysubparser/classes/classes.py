@@ -19,14 +19,13 @@ WRITERS = {
 
 TIMESTAMP_FORMAT = '%H:%M:%S,%f'
 
-ALPHA_CLEANER = re.compile(r'[^\w\s\?]+', re.UNICODE)
 BRACKETS_CLEANER = re.compile(r'\[[^[]*\]', re.UNICODE)
 FORMAT_CLOSE_CLEANER = re.compile(r'</[^[]*>', re.UNICODE)
 FORMAT_OPEN_CLEANER = re.compile(r'<[^[]*>', re.UNICODE)
 WHITESPACE_CLEANER = re.compile(r'\s+', re.UNICODE)
 ADVERTING_CLEANER = re.compile(r'''
                     .*?    # non-greedy match before adv
-                    (www\.Addic7ed\.com|corrected by|subtitles) # adv keywords
+                    (www\..*\.com|corrected[ ]*by|resync[ ]*by|subtitles) # adv keywords
                     .*     # rest of the subtitle
                     ''', re.UNICODE|re.VERBOSE|re.IGNORECASE|re.DOTALL)
 
@@ -157,5 +156,5 @@ class Subtitle:
                         self.text_lines[i] = unidecode.unidecode(self.text_lines[i])
 
     def __repr__(self):
-        return f"{self.start_string}-{self.end_string}  {self.text} ({self.duration} ms.)"
+        return f"{self.start_string}-{self.end_string}\n{self.text} ({self.duration} ms.)\n"
 
