@@ -9,26 +9,27 @@ TIMESTAMP_SEPARATOR = ' --> '
 TIMESTAMP_FORMAT = '%H:%M:%S,%f'
 
 
-def write(subtitles, encoding=None, **kwargs):
+def write(subtitles, path, subtitles_type, encoding):
 
     """
-    Save subtitles to the source directory of the origin subtitles.
+    Save subtitles in srt format.
 
         subtitles: Instance of Subtitles Class.
-
-    note: only srt implemented
+        path: path to write subtitles file
+        subtitle_type: srt (only implemented)
+        encoding: encoding
     """
-    # backup original version
-    p = Path(subtitles.source)
-    p.rename(p.with_suffix('.srt.orig'))
+    # create pathlib object
+    p = Path(path)
+
+    if p == subtitles.source_path:
+        # backup original version
+        p.rename(p.with_suffix('.srt.orig'))
 
     index = 1
 
-    if not encoding:
-        # get encoding from Subtitles attribut
-        encoding = subtitles.encoding
 
-    with open(subtitles.source, mode='w', encoding=encoding) as file:
+    with open(subtitles.source_path, mode='w', encoding=encoding) as file:
 
         print("Write subtiles to disk and skip empty subtitles...")
 
