@@ -48,10 +48,10 @@ def parse(path, encoding='utf-8', clean=True, **kwargs):
                     # spf: return subtitle dict
                     subtitles[index] = subtitle
                     subtitle = None
-    print(f"subtitles actually is of type {type(subtitles)}")
+    #print(f"subtitles actually is of type {type(subtitles)}")
     subtitles = Subtitles(subtitles, path, subtitle_type=subtitle_type, encoding=encoding)
-    print(f"subtitles actually is of type {type(subtitles)}")
-
+    #print(f"subtitles actually is of type {type(subtitles)}")
+    print(f"clean = {clean}")
     if clean:
        subtitles.clean()
 

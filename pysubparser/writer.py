@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Iterable
 
 from pysubparser.classes.exceptions import InvalidSubtitleTypeError
-from pysubparser.classes import subtitles
+#from pysubparser.classes.subtitles import Subtitles
 from pysubparser.writers import srt
 
 WRITERS = {
