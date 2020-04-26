@@ -9,40 +9,41 @@ TIMESTAMP_SEPARATOR = ' --> '
 TIMESTAMP_FORMAT = '%H:%M:%S,%f'
 
 
-def write(subtitles, encoding=None, **kwargs):
+def write(subtitles, path, subtitles_type, encoding):
 
     """
-    Save subtitles to the source directory of the origin subtitles.
+    Save subtitles in srt format.
 
         subtitles: Instance of Subtitles Class.
-
-    note: only srt implemented
+        path: path to write subtitles file
+        subtitle_type: srt (only implemented)
+        encoding: encoding
     """
-    # backup original version
-    p = Path(subtitles.source)
-    p.rename(p.with_suffix('.srt.orig'))
+    # create pathlib object
+    p = Path(path)
+
+    if p.exists():
+        # backup original version
+        p.rename(p.with_suffix('.srt.orig'))
 
     index = 1
 
-    if not encoding:
-        # get encoding from Subtitles attribut
-        encoding = subtitles.encoding
 
-    with open(subtitles.source, mode='w', encoding=encoding) as file:
+    with open(subtitles.source_path, mode='w', encoding=encoding) as file:
 
         print("Write subtiles to disk and skip empty subtitles...")
 
-        # delete empty subs since impossible in a loop
+        # delete empty.subtitles since impossible in a loop
         to_delete = []
-        [to_delete.append(_) for _,sub in subtitles.subs.items() if sub.text == '']
+        [to_delete.append(_) for _,sub in subtitles.subtitles.items() if sub.text == '']
 
-        # remove marked entries from subs-dict
+        # remove marked entries from.subtitles-dict
         for entry in to_delete:
 
-            subtitles.subs.pop(entry)
+            subtitles.subtitles.pop(entry)
 
 
-        for _,sub in subtitles.subs.items():
+        for _,sub in subtitles.subtitles.items():
             if sub.text == '':
                 # remove empty subtitle
                 #print(f"Skip empty subtitle on position {_}")

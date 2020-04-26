@@ -1,8 +1,9 @@
 from pathlib import Path
 from datetime import datetime
-from itertools import count
 
-from pysubparser.classes.classes import Subtitle, Subtitles
+
+from pysubparser.classes.subtitle import Subtitle
+from pysubparser.classes.subtitles import Subtitles
 from pysubparser.classes.exceptions import InvalidTimestampError
 
 TIMESTAMP_SEPARATOR = ' --> '
@@ -23,7 +24,7 @@ def parse_timestamps(line):
 
 def parse(path, encoding='utf-8', clean=True, **kwargs):
 
-    subtype = Path(path).suffix[1:]
+    subtitle_type = Path(path).suffix[1:]
     index = 0
     subtitles = {}
 
@@ -44,12 +45,14 @@ def parse(path, encoding='utf-8', clean=True, **kwargs):
                 if line:
                     subtitle.add_text_line(line)
                 else:
-                    if clean:
-                        subtitle.clean_up()
                     # spf: return subtitle dict
                     subtitles[index] = subtitle
                     subtitle = None
-
-    subtitles = Subtitles(subtitles, path, subtype=subtype, encoding=encoding)
+    #print(f"subtitles actually is of type {type(subtitles)}")
+    subtitles = Subtitles(subtitles, path, subtitle_type=subtitle_type, encoding=encoding)
+    #print(f"subtitles actually is of type {type(subtitles)}")
+    print(f"clean = {clean}")
+    if clean:
+       subtitles.clean()
 
     return subtitles
