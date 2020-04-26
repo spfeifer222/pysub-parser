@@ -22,7 +22,7 @@ def write(subtitles, path, subtitles_type, encoding):
     # create pathlib object
     p = Path(path)
 
-    if p == subtitles.source_path:
+    if p.exists():
         # backup original version
         p.rename(p.with_suffix('.srt.orig'))
 

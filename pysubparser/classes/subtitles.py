@@ -3,7 +3,7 @@ import unidecode
 import datetime as dt
 from pathlib import Path
 
-from pysubparser import writer
+from pysubparser.writer import write
 from pysubparser.utils import time_to_ms
 from pysubparser.cleaners.advertising import clean_advertising
 from pysubparser.cleaners.lower_case import clean_lowercase
@@ -62,14 +62,22 @@ class Subtitles:
                 # clean every line of the subtitle
                 if to_lowercase:
                     sub = clean_lowercase(sub)
-
                 if remove_brackets:
                     sub = clean_brackets(sub)
-
                 if remove_formatting:
                     sub = clean_format
-
                 if to_ascii:
                     sub = clean_ascii(sub)
-
                 sub = clean_whitespace(sub)
+
+    def write(self, *args):
+        """
+        Save subtitles to disk (inlcluding a backup of original file).
+
+        Default: origin directory, subtitle typ, and encodng.
+        args:
+            path:           path to file to save to
+            subtitle_type:  (only srt implemented)
+            encoding:       encoding as string, e.g. 'utf-8'
+        """
+        write(self)

@@ -24,8 +24,6 @@ def write(subtitles, path = None, subtitle_type = None, encoding = None):
     """
 
     if not path:
-        print(f"path = {path} ({type(path)}")
-        print(f"subtitles = {subtitles} ({type(subtitles)}")
         path = subtitles.source_path
 
     if not subtitle_type:
