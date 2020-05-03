@@ -1,7 +1,7 @@
 from pathlib import Path
 from datetime import datetime
 
-
+from pysubparser.utils import *
 from pysubparser.classes.subtitle import Subtitle
 from pysubparser.classes.subtitles import Subtitles
 from pysubparser.classes.exceptions import InvalidTimestampError
@@ -26,7 +26,7 @@ def parse(path, encoding='utf-8', clean=True, **kwargs):
 
     subtitle_type = Path(path).suffix[1:]
     index = 0
-    subtitles = {}
+    #subtitles = {}
 
     with open(path, encoding=encoding) as file:
 
@@ -45,14 +45,16 @@ def parse(path, encoding='utf-8', clean=True, **kwargs):
                 if line:
                     subtitle.add_text_line(line)
                 else:
-                    # spf: return subtitle dict
-                    subtitles[index] = subtitle
+                    yield subtitle
                     subtitle = None
-    #print(f"subtitles actually is of type {type(subtitles)}")
-    subtitles = Subtitles(subtitles, path, subtitle_type=subtitle_type, encoding=encoding)
-    #print(f"subtitles actually is of type {type(subtitles)}")
-    print(f"clean = {clean}")
+
     if clean:
-       subtitles.clean()
+
+       subtitle_clean = (sub.clean() for sub in subtitle)
+       subtitles = Subtitles(subtitle_clean, path, subtitle_type=subtitle_type, encoding=encoding)
+
+    else:
+
+        subtitles = Subtitles(subtitle, path, subtitle_type=subtitle_type, encoding=encoding)
 
     return subtitles
