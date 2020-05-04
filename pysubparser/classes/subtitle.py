@@ -5,22 +5,13 @@ from pathlib import Path
 
 from pysubparser.utils import time_to_ms
 
-TIMESTAMP_FORMAT = '%H:%M:%S,%f'
-
-FORMAT_CLOSE_CLEANER = re.compile(r'</[^[]*>', re.UNICODE)
-FORMAT_OPEN_CLEANER = re.compile(r'<[^[]*>', re.UNICODE)
-WHITESPACE_CLEANER = re.compile(r'\s+', re.UNICODE)
-ADVERTING_CLEANER = re.compile(r'''
-                    .*?    # non-greedy match before adv
-                    (www\..*\.com|corrected[ ]*by|resync[ ]*by|subtitles) # adv keywords
-                    .*     # rest of the subtitle
-                    ''', re.UNICODE|re.VERBOSE|re.IGNORECASE|re.DOTALL)
-
-
 class Subtitle:
     """
     Class to save times and content of a single subtitle.
     """
+
+    TIMESTAMP_FORMAT = '%H:%M:%S,%f'
+
     def __init__(self, index, start=None, end=None, text_lines=None):
         self.index = index
         self.start = start

@@ -4,12 +4,7 @@ import datetime as dt
 from pathlib import Path
 
 from pysubparser.writer import write
-from pysubparser.utils import time_to_ms
-from pysubparser.cleaners.advertising import clean_advertising
-from pysubparser.cleaners.lower_case import clean_lowercase
-from pysubparser.cleaners.formatting import clean_format
-from pysubparser.cleaners.brackets import clean_brackets
-from pysubparser.cleaners.whitespace import clean_whitespace
+from pysubparser.utils import time_to_ms, clean
 
 
 class Subtitles:
@@ -51,28 +46,13 @@ class Subtitles:
 
         "Clean subtitles."
 
-        for _,sub in self.subtitles.items():
+        for _,subtitle in self.subtitles.items():
 
-            if remove_advertising:
+            clean(subtitle)
 
-                # remove complete subtitle, if 1 line match advertising
-                clean_advertising(sub)
-
-            else:
-                # clean every line of the subtitle
-                if to_lowercase:
-                    sub = clean_lowercase(sub)
-                if remove_brackets:
-                    sub = clean_brackets(sub)
-                if remove_formatting:
-                    sub = clean_format
-                if to_ascii:
-                    sub = clean_ascii(sub)
-                sub = clean_whitespace(sub)
-
-    def write(self, *args):
+    def write(self, path=None, subtitle_type=None, encoding=None):
         """
-        Save subtitles to disk (inlcluding a backup of original file).
+        Save subtitles to disk (including a backup of original file).
 
         Default: origin directory, subtitle typ, and encodng.
         args:
@@ -80,4 +60,6 @@ class Subtitles:
             subtitle_type:  (only srt implemented)
             encoding:       encoding as string, e.g. 'utf-8'
         """
-        write(self)
+        print("This is Subtitles.write()")
+        print(f"{write.__code__.co_varnames}")
+        write(self, path = path, subtitle_type = subtitle_type, encoding = encoding)

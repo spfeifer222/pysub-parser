@@ -51,8 +51,9 @@ def parse(path, encoding='utf-8', clean=True, **kwargs):
     #print(f"subtitles actually is of type {type(subtitles)}")
     subtitles = Subtitles(subtitles, path, subtitle_type=subtitle_type, encoding=encoding)
     #print(f"subtitles actually is of type {type(subtitles)}")
-    print(f"clean = {clean}")
+    print(f"Clean subtitles...")
     if clean:
        subtitles.clean()
+    print("Done.")
 
     return subtitles

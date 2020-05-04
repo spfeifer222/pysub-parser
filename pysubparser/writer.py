@@ -9,7 +9,7 @@ WRITERS = {
     'srt': srt.write
 }
 
-def write(subtitles, path = None, subtitle_type = None, encoding = None):
+def write(subtitles, path, subtitle_type, encoding):
     """
     Write subtitles in subtitle_type format to file. If no path,
     subtitle_type, or encoding are given, the attributes
@@ -22,6 +22,7 @@ def write(subtitles, path = None, subtitle_type = None, encoding = None):
         subtitle_type: srt (only implemented)
         encoding: encoding
     """
+    print(subtitles)
 
     if not path:
         path = subtitles.source_path

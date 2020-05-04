@@ -9,7 +9,7 @@ TIMESTAMP_SEPARATOR = ' --> '
 TIMESTAMP_FORMAT = '%H:%M:%S,%f'
 
 
-def write(subtitles, path, subtitles_type, encoding):
+def write(subtitles, path, subtitle_type, encoding):
 
     """
     Save subtitles in srt format.
