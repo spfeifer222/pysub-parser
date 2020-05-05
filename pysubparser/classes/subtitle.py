@@ -5,12 +5,14 @@ from pathlib import Path
 
 from pysubparser.utils import time_to_ms
 
+
+TIMESTAMP_FORMAT = '%H:%M:%S,%f'
+
+
 class Subtitle:
     """
     Class to save times and content of a single subtitle.
     """
-
-    TIMESTAMP_FORMAT = '%H:%M:%S,%f'
 
     def __init__(self, index, start=None, end=None, text_lines=None):
         self.index = index

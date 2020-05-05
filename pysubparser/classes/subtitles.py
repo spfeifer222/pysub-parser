@@ -42,13 +42,15 @@ class Subtitles:
             sub.start = start.time()
             sub.end = end.time()
 
-    def clean(self, to_lowercase=False, to_ascii=False, remove_brackets=True, remove_formatting=False, remove_advertising=True):
+    def clean(self, to_lowercase=False, to_ascii=False, remove_brackets=True, remove_formatting=False, remove_advertising=True, remove_names=True):
 
         "Clean subtitles."
 
         for _,subtitle in self.subtitles.items():
 
-            clean(subtitle)
+            subtitle = clean(subtitle, to_lowercase, to_ascii, remove_brackets, remove_formatting, remove_advertising, remove_names)
+
+        #return subtitles
 
     def write(self, path=None, subtitle_type=None, encoding=None):
         """
@@ -60,6 +62,4 @@ class Subtitles:
             subtitle_type:  (only srt implemented)
             encoding:       encoding as string, e.g. 'utf-8'
         """
-        print("This is Subtitles.write()")
-        print(f"{write.__code__.co_varnames}")
         write(self, path = path, subtitle_type = subtitle_type, encoding = encoding)

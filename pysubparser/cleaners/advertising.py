@@ -16,7 +16,11 @@ def clean_advertising(subtitle):
 
     subtitle: instance of subtitle class.
     """
-
     if ADVERTING_CLEANER.search(subtitle.text):
 
+        ad = ADVERTING_CLEANER.search(subtitle.text).group(1)
+
+        print(f"Remove advertising subtitle containing: {ad}")
         subtitle.text_lines = []
+
+    return subtitle
