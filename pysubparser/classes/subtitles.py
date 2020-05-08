@@ -9,7 +9,9 @@ from pysubparser.utils import time_to_ms, clean
 
 class Subtitles:
     """
-    Class to save all Subtitles of a movie including it's type and
+    Class to save all Subtitles of a movie.
+
+    including it's type and
     original path.
     """
 

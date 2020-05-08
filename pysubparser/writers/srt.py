@@ -29,9 +29,9 @@ def write(subtitles, path, subtitle_type, encoding):
     index = 1
 
 
-    with open(subtitles.source_path, mode='w', encoding=encoding) as file:
+    with open(p, mode='w', encoding=encoding) as file:
 
-        print("Write subtiles to disk and skip empty subtitles...")
+        print("Write subtiles to disk ...")
 
         # delete empty.subtitles since impossible in a loop
         to_delete = []
