@@ -14,6 +14,7 @@ def clean_brackets(subtitle):
     """
 
     for i in range(len(subtitle.text_lines)):
+
         if BRACKETS_CLEANER.search(subtitle.text_lines[i]):
 
             brackets = BRACKETS_CLEANER.search(subtitle.text_lines[i]).group(0)

@@ -1,6 +1,6 @@
 import re
 
-from pysubparser.classes.subtitle import Subtitle
+#from pysubparser.classes.subtitle import Subtitle
 
 FORMAT_OPEN_CLEANER = re.compile(r'<[^[]*>', re.UNICODE)
 FORMAT_CLOSE_CLEANER = re.compile(r'</[^[]*>', re.UNICODE)

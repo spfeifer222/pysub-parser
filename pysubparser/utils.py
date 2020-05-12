@@ -22,12 +22,12 @@ def clean(subtitle, to_lowercase=False, to_ascii=False, remove_brackets=True, re
     # clean every line of the subtitle
     if to_lowercase:
         subtitle = clean_lowercase(subtitle)
+    if remove_formatting:
+        subtitle = clean_format
     if remove_brackets:
         subtitle = clean_brackets(subtitle)
     if remove_names:
         subtitle = clean_names(subtitle)
-    if remove_formatting:
-        subtitle = clean_format
     if to_ascii:
         subtitle = clean_ascii(subtitle)
     # remove multiple whitespaces (only one left)
