@@ -7,6 +7,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=federicocalendino_pysub-parser&metric=alert_status)](https://sonarcloud.io/dashboard?id=federicocalendino_pysub-parser)
 [![CodeCoverage](https://codecov.io/gh/federicocalendino/pysub-parser/branch/master/graph/badge.svg)](https://codecov.io/gh/federicocalendino/pysub-parser)
 -->
+Special Thanks goes to __Federico Calendino__ who created pysub-parser.
 
 
 Utility to extract, clean, and print/save the content of a subtitle file.
