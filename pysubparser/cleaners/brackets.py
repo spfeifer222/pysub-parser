@@ -3,12 +3,17 @@ import re
 #from pysubparser.classes.subtitle import Subtitle
 
 
-BRACKETS_CLEANER = re.compile(r'\[[^[]*\]', re.UNICODE)
-
+BRACKETS_CLEANER = re.compile(r'''
+        (\[|\()+      # opening bracket
+        .*          # everything until
+        (\]|\))+      # closing bracket
+        '''
+        , re.UNICODE|re.X)
+        # closing bracket
 
 def clean_brackets(subtitle):
     """
-    Remove square brackets and it's content.
+    Remove square OR round brackets and it's content.
 
     subtitle: instance of subtitle class.
     """
@@ -17,9 +22,9 @@ def clean_brackets(subtitle):
 
         if BRACKETS_CLEANER.search(subtitle.text_lines[i]):
 
-            brackets = BRACKETS_CLEANER.search(subtitle.text_lines[i]).group(0)
+            to_remove = BRACKETS_CLEANER.search(subtitle.text_lines[i]).group(0)
 
-            print(f"Remove bracket & content: {brackets}")
+            print(f"Remove bracket & content: {to_remove}")
             subtitle.text_lines[i] = BRACKETS_CLEANER.sub('', subtitle.text_lines[i])
 
     return subtitle
