@@ -5,8 +5,9 @@ import re
 
 NAMES_CLEANER = re.compile(r"""
 
-        [-]*        # if exist: hyphen
+        [- ]*        # if exist: hyphen & spaces
         [A-Z]{2,}   # two or more CAPITAL letters
+        [ ]*         # if exist: spaces
         :            # followed by a colon
         [ ]*         # if exists: whitespace(s)
 
