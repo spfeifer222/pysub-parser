@@ -36,12 +36,17 @@ def parse(path, encoding='utf-8', clean=True, **kwargs):
             line = line.rstrip()
 
             if not subtitle:
+            # search  time data for subtitle
+            # save index and start/end data
+
                 if TIMESTAMP_SEPARATOR in line:
 
                     index += 1
                     start, end = parse_timestamps(line)
                     subtitle = Subtitle(index, start, end)
             else:
+            # search for single linebreaks
+            # save lines in text_lines attribute of Subtitle class (a list)
                 if line:
                     subtitle.add_text_line(line)
                 else:

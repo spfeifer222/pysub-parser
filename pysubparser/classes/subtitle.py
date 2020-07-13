@@ -3,7 +3,7 @@ import unidecode
 import datetime as dt
 from pathlib import Path
 
-from pysubparser.utils import time_to_ms
+from pysubparser.utils import time_to_ms, clean
 
 
 TIMESTAMP_FORMAT = '%H:%M:%S,%f'
@@ -80,6 +80,18 @@ class Subtitle:
         """
 
         self.text_lines.append(text)
+
+    def clean(self,
+              to_lowercase=False,
+              to_ascii=False,
+              remove_brackets=True,
+              remove_formatting=False,
+              remove_advertising=True,
+              remove_names=True):
+
+        "Clean single subtitle."
+
+        return clean(subtitle, to_lowercase, to_ascii, remove_brackets, remove_formatting, remove_advertising, remove_names)
 
     def __repr__(self):
         return f"{self.start_string}-{self.end_string}\n{self.text} ({self.duration} ms.)\n"

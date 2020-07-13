@@ -44,7 +44,13 @@ class Subtitles:
             sub.start = start.time()
             sub.end = end.time()
 
-    def clean(self, to_lowercase=False, to_ascii=False, remove_brackets=True, remove_formatting=False, remove_advertising=True, remove_names=True):
+    def clean(self,
+              to_lowercase=False,
+              to_ascii=False,
+              remove_brackets=True,
+              remove_formatting=False,
+              remove_advertising=True,
+              remove_names=True):
 
         "Clean subtitles."
 
