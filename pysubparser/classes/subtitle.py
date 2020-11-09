@@ -94,5 +94,8 @@ class Subtitle:
         return clean(subtitle, to_lowercase, to_ascii, remove_brackets, remove_formatting, remove_advertising, remove_names)
 
     def __repr__(self):
-        return f"{self.start_string}-{self.end_string}\n{self.text} ({self.duration} ms.)\n"
+        # long style
+        #return f"{self.start_string}-{self.end_string}\n{self.text} ({self.duration} ms.)\n"
+        # short style
+        return f"{self.text}\n"
 

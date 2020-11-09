@@ -2,8 +2,7 @@ import re
 
 #from pysubparser.classes.subtitle import Subtitle
 
-FORMAT_OPEN_CLEANER = re.compile(r'<[^[]*>', re.UNICODE)
-FORMAT_CLOSE_CLEANER = re.compile(r'</[^[]*>', re.UNICODE)
+FORMAT_TAG_CLEANER = re.compile(r'<[^>]*>', re.UNICODE)
 
 
 def clean_format(subtitle):
@@ -14,7 +13,11 @@ def clean_format(subtitle):
     """
     for i in range(len(subtitle.text_lines)):
 
-        subtitle.text_lines[i] = FORMAT_OPEN_CLEANER.sub('', subtitle.text_lines[i])
-        subtitle.text_lines[i] = FORMAT_CLOSE_CLEANER.sub('', subtitle.text_lines[i])
+        if FORMAT_TAG_CLEANER.search(subtitle.text_lines[i]):
+
+            tag = FORMAT_TAG_CLEANER.search(subtitle.text_lines[i]).group(0)
+            print(f"Remove tag: {tag}")
+
+            subtitle.text_lines[i] = FORMAT_OPEN_CLEANER.sub('', subtitle.text_lines[i])
 
     return subtitle

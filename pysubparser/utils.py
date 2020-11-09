@@ -5,7 +5,14 @@ def time_to_ms(t: time) -> int:
     seconds = (t.hour * 60 + t.minute) * 60 + t.second
     return seconds  * 1000 + t.microsecond//1000
 
-def clean(subtitle, to_lowercase=False, to_ascii=False, remove_brackets=True, remove_formatting=False, remove_advertising=True, remove_names=True):
+
+def clean(subtitle,
+          to_lowercase=False,
+          to_ascii=False,
+          remove_brackets=True,
+          remove_formatting=False,
+          remove_advertising=True,
+          remove_names=True):
 
     "Clean single subtitle."
 
@@ -23,7 +30,7 @@ def clean(subtitle, to_lowercase=False, to_ascii=False, remove_brackets=True, re
     if to_lowercase:
         subtitle = clean_lowercase(subtitle)
     if remove_formatting:
-        subtitle = clean_format
+        subtitle = clean_format(subtitle)
     if remove_brackets:
         subtitle = clean_brackets(subtitle)
     if remove_names:

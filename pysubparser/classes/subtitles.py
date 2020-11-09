@@ -56,7 +56,13 @@ class Subtitles:
 
         for _,subtitle in self.subtitles.items():
 
-            subtitle = clean(subtitle, to_lowercase, to_ascii, remove_brackets, remove_formatting, remove_advertising, remove_names)
+            subtitle = clean(subtitle,
+                             to_lowercase=to_lowercase,
+                             to_ascii=to_ascii,
+                             remove_brackets=remove_brackets,
+                             remove_formatting=remove_formatting,
+                             remove_advertising=remove_advertising,
+                             remove_names=remove_names)
 
         #return subtitles
 

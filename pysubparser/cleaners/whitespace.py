@@ -15,7 +15,7 @@ def clean_whitespace(subtitle):
     """
     for i in range(len(subtitle.text_lines)):
 
-        subtitle.text_lines[i] = WHITESPACE_CLEANER.sub(' ', subtitle.text_lines[i].strip())
         subtitle.text_lines[i] = SPECIAL_SIGNS_NOTE.sub('♪', subtitle.text_lines[i])
+        subtitle.text_lines[i] = WHITESPACE_CLEANER.sub(' ', subtitle.text_lines[i].strip(' :-'))
 
     return subtitle

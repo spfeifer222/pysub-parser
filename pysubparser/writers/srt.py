@@ -16,7 +16,7 @@ def write(subtitles, path, subtitle_type, encoding):
 
         subtitles: Instance of Subtitles Class.
         path: path to write subtitles file
-        subtitle_type: srt (only implemented)
+        subtitle_type: srt (the only implemented type)
         encoding: encoding
     """
     # create pathlib object
@@ -33,9 +33,11 @@ def write(subtitles, path, subtitle_type, encoding):
 
         print("Write subtiles to disk ...")
 
-        # delete empty.subtitles since impossible in a loop
+        # save subt. to delete, since direct deleting is impossible in a loop
         to_delete = []
-        [to_delete.append(_) for _,sub in subtitles.subtitles.items() if sub.text == '']
+        # empty subtitles
+        [to_delete.append(_) for _,sub in subtitles.subtitles.items() if sub.text.strip('♪ ') == '']
+
 
         # remove marked entries from.subtitles-dict
         for entry in to_delete:

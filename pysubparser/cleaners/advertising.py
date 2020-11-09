@@ -4,7 +4,13 @@ import re
 ADVERTING_CLEANER = re.compile(r'''
 
     .*?    # non-greedy match before adv
-    (www\..*\.com|corrected[ ]*by|resync[ ]*by|subtitles) # adv keywords
+    (www\..*\.com
+        |corrected[ ]*by
+        |resync[ ]*by
+        |subtitles
+        |caption[a-z]*[ ]*sponsored[ ]*by
+        |Addic7ed
+        ) # adv keywords
     .*     # rest of the subtitle
 
     ''', re.UNICODE|re.VERBOSE|re.IGNORECASE|re.DOTALL)
