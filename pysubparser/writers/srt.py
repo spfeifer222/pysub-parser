@@ -36,7 +36,7 @@ def write(subtitles, path, subtitle_type, encoding):
         # save subt. to delete, since direct deleting is impossible in a loop
         to_delete = []
         # empty subtitles
-        [to_delete.append(_) for _,sub in subtitles.subtitles.items() if sub.text.strip('♪ ') == '']
+        [to_delete.append(_) for _,sub in subtitles.subtitles.items() if sub.text.strip('♪ _') == '']
 
 
         # remove marked entries from.subtitles-dict
